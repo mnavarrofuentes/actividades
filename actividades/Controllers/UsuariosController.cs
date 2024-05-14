@@ -1,4 +1,5 @@
 ﻿using actividades.Contracts.usuarios;
+using actividades.Services.usuarios;
 using Microsoft.AspNetCore.Mvc;
 
 namespace actividades.Controllers
@@ -7,10 +8,23 @@ namespace actividades.Controllers
     [Route("api/usuarios")]
     public class UsuariosController : Controller
     {
-        [HttpPost]
-        public ActionResult CreateUser(CreateUserRequest request)
+
+        private readonly IUsuariosService usuariosService;
+
+        public UsuariosController(IUsuariosService usuariosService)
         {
-            return Ok(request);
+            this.usuariosService = usuariosService;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateUser(CreateUserRequest request)
+        {
+            var result = await usuariosService.Create(request);
+
+            if (result.validationErrors != null && result.validationErrors.Any())
+                return UnprocessableEntity(result.validationErrors);
+
+            return Ok(result.newEntityId);
         }
 
         [HttpGet]

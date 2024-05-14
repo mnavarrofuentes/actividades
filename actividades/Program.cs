@@ -1,4 +1,5 @@
 using actividades.Models;
+using actividades.Services.usuarios;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,11 @@ builder.Services.AddDbContext<control_tareasContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PubContext"));
 });
 
+
+builder.Services.AddScoped<IUsuariosService,UsuariosService>();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
