@@ -1,4 +1,5 @@
 using actividades.Models;
+using actividades.Services.auth;
 using actividades.Services.usuarios;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,18 @@ builder.Services.AddDbContext<control_tareasContext>(options =>
 
 builder.Services.AddScoped<IUsuariosService,UsuariosService>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 var app = builder.Build();
+
+
+app.UseCors(c =>
+    c.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .WithExposedHeaders("location")
+    .WithExposedHeaders("content-disposition")
+);
 
 
 // Configure the HTTP request pipeline.
