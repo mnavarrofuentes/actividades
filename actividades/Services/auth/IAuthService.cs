@@ -4,6 +4,6 @@ namespace actividades.Services.auth
 {
     public interface IAuthService
     {
-        Task<(List<string>? validationErrors, int? newEntityId)> Login(LoginRequest request);
+        Task<(LoginResponse? response, List<string>? validationErrors)> Login(LoginRequest request);
     }
 }

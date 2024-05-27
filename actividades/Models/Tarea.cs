@@ -16,9 +16,10 @@ namespace actividades.Models
         public string Nombre { get; set; } = null!;
         public string? Descripcion { get; set; }
         public DateOnly? FechaLimite { get; set; }
-        public int? Prioridad { get; set; }
+        public int? Orden { get; set; }
         public bool? Completada { get; set; }
         public int? CreadorId { get; set; }
+        public int Prioridad { get; set; }
 
         public virtual Usuario? Creador { get; set; }
         public virtual ICollection<AsignacionEquipo> AsignacionEquipos { get; set; }

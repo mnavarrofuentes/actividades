@@ -157,9 +157,13 @@ namespace actividades.Models
                     .HasMaxLength(100)
                     .HasColumnName("nombre");
 
+                entity.Property(e => e.Orden)
+                    .HasColumnName("orden")
+                    .HasDefaultValueSql("0");
+
                 entity.Property(e => e.Prioridad)
                     .HasColumnName("prioridad")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("1");
 
                 entity.HasOne(d => d.Creador)
                     .WithMany(p => p.Tareas)

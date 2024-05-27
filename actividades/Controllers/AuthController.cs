@@ -1,4 +1,6 @@
 ﻿using actividades.Contracts.auth;
+using actividades.Services.auth;
+using actividades.Services.usuarios;
 using Microsoft.AspNetCore.Mvc;
 
 namespace actividades.Controllers
@@ -7,11 +9,29 @@ namespace actividades.Controllers
     [Route("api/auth")]
     public class AuthController : Controller
     {
-        [HttpPost("login")]
-        public ActionResult Login(LoginRequest request)
+
+        private readonly IAuthService authService;
+
+
+        public AuthController(IAuthService authService)
         {
-            var token = GenerateToken();
-            return Ok(new { token });
+            this.authService = authService;
+        }
+
+
+        [HttpPost("login")]
+        public async Task<ActionResult>  Login(LoginRequest request)
+        {
+            var (response, validationErrors) = await authService.Login(request);
+
+            if (response != null)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(new { errors = validationErrors });
+            }
         }
 
         [HttpPost("logout")]

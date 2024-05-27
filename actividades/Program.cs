@@ -1,11 +1,16 @@
 using actividades.Models;
 using actividades.Services.auth;
 using actividades.Services.usuarios;
+using actividades.Services.Tarea;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using actividades.common;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -21,6 +26,9 @@ builder.Services.AddDbContext<control_tareasContext>(options =>
 builder.Services.AddScoped<IUsuariosService,UsuariosService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+builder.Services.AddScoped<ITareaService, TareaService>();
 
 var app = builder.Build();
 
