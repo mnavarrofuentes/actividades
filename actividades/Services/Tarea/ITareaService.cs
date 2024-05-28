@@ -1,4 +1,5 @@
-﻿using actividades.Contracts.tareas;
+﻿using actividades.Contracts.comentarios;
+using actividades.Contracts.tareas;
 
 namespace actividades.Services.Tarea
 {
@@ -15,6 +16,8 @@ namespace actividades.Services.Tarea
         Task<List<TareaResponse>> GetTareasByCreadorIdAsync(int creadorId);
 
         Task<bool> UpdateTareaAsync(int id, TareaUpdateRequest request);
+
+        Task<IEnumerable<ResponseComentario>> GetComentarios(int tareaId);
 
     }
 }

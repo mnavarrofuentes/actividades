@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Contracts\asignaciones\" />
-    <Folder Include="Contracts\comentarios\" />
     <Folder Include="Models\" />
   </ItemGroup>
 

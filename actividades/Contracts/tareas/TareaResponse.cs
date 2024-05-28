@@ -8,6 +8,7 @@
        int? Orden,
        bool? Completada,
        int? CreadorId,
-       int? Prioridad
+       int? Prioridad,
+       String asignado
    );
 }

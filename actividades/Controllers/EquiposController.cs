@@ -50,6 +50,7 @@ namespace actividades.Controllers
         public async Task<ActionResult<IEnumerable<TareaResponse>>> GetTareasByEquipoId(int id)
         {
             var tareas = await _context.Tareas
+                .Include(t => t.AsignacionUsuarios)
                 .Where(t => t.AsignacionEquipos.Any(ae => ae.EquipoId == id))
                 .ToListAsync();
 
@@ -58,16 +59,29 @@ namespace actividades.Controllers
                 return Ok(new List<Tarea>());
             }
 
-            return tareas.Select(t => new TareaResponse(
-                t.Id,
-                t.Nombre,
-                t.Descripcion,
-                t.FechaLimite,
-                t.Orden,
-                t.Completada,
-                t.CreadorId,
-                t.Prioridad
-            )).ToList();
+            var tareaResponses = new List<TareaResponse>();
+
+            foreach (var tarea in tareas)
+            {
+                // Obtener el correo electrónico del usuario asignado
+                var usuarioAsignado = tarea.AsignacionUsuarios.FirstOrDefault();
+                var correoUsuarioAsignado = usuarioAsignado != null ? await _context.Usuarios.FindAsync(usuarioAsignado.UsuarioId) : null;
+                var correo = correoUsuarioAsignado?.Correo;
+
+                tareaResponses.Add(new TareaResponse(
+                    tarea.Id,
+                    tarea.Nombre,
+                    tarea.Descripcion,
+                    tarea.FechaLimite,
+                    tarea.Orden,
+                    tarea.Completada,
+                    tarea.CreadorId,
+                    tarea.Prioridad,
+                    correo
+                ));
+            }
+
+            return tareaResponses;
         }
 
         [HttpGet("usuario/{usuarioId}/equipos")]

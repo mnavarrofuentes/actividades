@@ -1,4 +1,5 @@
-﻿using actividades.Contracts.tareas;
+﻿using actividades.Contracts.comentarios;
+using actividades.Contracts.tareas;
 using actividades.Services.Tarea;
 using actividades.Services.usuarios;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,20 @@ namespace actividades.Controllers
                 return NotFound();
             }
             return NoContent();
+        }
+
+        [HttpGet("{tareaId}/comentarios")]
+        public async Task<ActionResult<IEnumerable<ResponseComentario>>> GetComentarios(int tareaId)
+        {
+            try
+            {
+                var comentarios = await _tareaService.GetComentarios(tareaId);
+                return Ok(comentarios);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al obtener comentarios: {ex.Message}");
+            }
         }
     }
 }
