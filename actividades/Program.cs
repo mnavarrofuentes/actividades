@@ -5,6 +5,7 @@ using actividades.Services.Tarea;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using actividades.common;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -29,6 +30,22 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 builder.Services.AddScoped<ITareaService, TareaService>();
+
+builder.Services.AddScoped<EmailSender>();
+
+
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("TaskReminderJob");
+    q.AddJob<TaskReminderJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("TaskReminderJob-trigger")
+        .WithCronSchedule("0 0 * ? * *")); // Ejecutar cada hora, a la hora en punto
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
 
